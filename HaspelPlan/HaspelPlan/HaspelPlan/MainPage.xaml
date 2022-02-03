@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HaspelPlan.MainPage">
+    <Grid>
+        <WebView x:Name="planView" VerticalOptions="Fill" HorizontalOptions="Fill"/>
+        <Label x:Name="noConnection" IsVisible="false" Text="Keine Verbindung zum Internet!" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black"/>
+    </Grid>
+</ContentPage>
