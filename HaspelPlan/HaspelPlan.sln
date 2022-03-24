@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaspelPlan.Android", "Haspe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaspelPlan.iOS", "HaspelPlan\HaspelPlan.iOS\HaspelPlan.iOS.csproj", "{BB7C2930-B819-4A77-9AA5-8CBF7579D711}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaspelPlan", "HaspelPlan\HaspelPlan\HaspelPlan.csproj", "{82947E48-B040-458E-8BF0-F20C39C27C34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HaspelPlan", "HaspelPlan\HaspelPlan\HaspelPlan.csproj", "{82947E48-B040-458E-8BF0-F20C39C27C34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

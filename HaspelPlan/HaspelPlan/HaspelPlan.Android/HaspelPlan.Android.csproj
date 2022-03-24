@@ -38,9 +38,14 @@
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
     <MandroidI18n />
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
+    <AndroidLinkTool>r8</AndroidLinkTool>
+    <AndroidDexTool>d8</AndroidDexTool>
+    <AndroidSupportedAbis />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>false</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
@@ -52,8 +57,11 @@
     <EnableLLVM>false</EnableLLVM>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
-    <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
+    <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <AndroidSupportedAbis />
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <MandroidI18n />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
