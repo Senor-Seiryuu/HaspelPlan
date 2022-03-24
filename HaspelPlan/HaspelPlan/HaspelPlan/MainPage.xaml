@@ -5,5 +5,14 @@
     <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
         <WebView x:Name="planView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
         <Label x:Name="noConnection" IsVisible="false" Text="Keine Verbindung zum Internet!" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black"/>
+        <Label x:Name="updatedTable" IsVisible="false" Text="Stundenplan wurde aktualisiert!" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#003758" FontSize="20"/>
+        <Button Text="Aktualisieren" Clicked="updateTable"
+        BackgroundColor="#003758"
+        BorderRadius="10"
+        BorderWidth="2"
+        BorderColor="#00AFD3"
+        HorizontalOptions="End"
+        VerticalOptions="End"
+        Margin="40"/>
     </Grid>
 </ContentPage>
