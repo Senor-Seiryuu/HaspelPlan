@@ -9,6 +9,7 @@ This Project is designed to cache and show the latest version of a school-timeta
 ### Modified
 - Removed unnecessary rows and colums from timetable
 - Added hours of subjects
+- Updated app icon
 
 
 # [1.0.0] - 15.10.2021
