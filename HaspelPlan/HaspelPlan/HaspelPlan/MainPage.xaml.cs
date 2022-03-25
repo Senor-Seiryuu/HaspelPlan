@@ -154,7 +154,7 @@ namespace HaspelPlan
             };
             planView.Source = html;
 
-            Device.StartTimer(new TimeSpan(0, 0, 15), () =>
+            Device.StartTimer(new TimeSpan(0, 0, 5), () =>
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
