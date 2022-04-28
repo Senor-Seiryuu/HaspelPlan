@@ -142,7 +142,7 @@ namespace HaspelPlan
         private void showPlan()
         {
             int calendarWeek = getCalendarWeek();
-            string content = LoadHttpPageWithBasicAuthentication($"http://www.bkah.de/schuelerplan_praesenz/{calendarWeek}/c/c00118.htm", "schuelerplan", "schwebebahn");
+            string content = LoadHttpPageWithBasicAuthentication($"http://www.bkah.de/schuelerplan_praesenz/{calendarWeek}/c/c00119.htm", "schuelerplan", "schwebebahn");
 
             content = content.Replace("�", "Ä");
             content = addHoursToTable(content);
