@@ -120,6 +120,7 @@ namespace HaspelPlan
         string addHoursToTable(string content)
         {
             //Stundenzeiten hinzufügen
+            content = content.Replace("  color=\"#000000\"", "");
             content = content.Replace("<TD align=\"center\"><TABLE><TR><TD></TD></TR></TABLE></TD>", "<TD align=\"center\"><TABLE><TR><TD>Stunden</TD></TR></TABLE></TD>");
             //Stunden 1 und 2
             content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>1</B>\n</font> </TD>\n</TR></TABLE></TD>"
@@ -146,7 +147,7 @@ namespace HaspelPlan
 
             content = content.Replace("�", "Ä");
             content = addHoursToTable(content);
-            content = removeUnnecessaryRows(content);
+            //content = removeUnnecessaryRows(content);
 
             var html = new HtmlWebViewSource
             {

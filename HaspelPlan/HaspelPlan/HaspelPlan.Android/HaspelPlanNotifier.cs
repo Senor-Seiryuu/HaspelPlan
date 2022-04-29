@@ -32,11 +32,8 @@ namespace HaspelPlan.Droid
         {
             string title = $"Local Notification #";
             string message = $"You have now received notifications!";
-
-            while(true)
-            {
-                notificationManager.SendNotification(title, message);
-            }
+            
+            notificationManager.SendNotification(title, message);
         }
 
         void RegisterForegroundServiceO(Intent intent)
