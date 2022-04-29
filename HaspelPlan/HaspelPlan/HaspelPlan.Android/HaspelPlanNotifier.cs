@@ -25,14 +25,15 @@ namespace HaspelPlan.Droid
             if(Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O) RegisterForegroundServiceO(intent);
             startPushingNotifications();
 
-            return StartCommandResult.Sticky;
+            StopSelf();
+            return StartCommandResult.NotSticky;
         }
 
         void startPushingNotifications()
         {
             string title = $"Local Notification #";
             string message = $"You have now received notifications!";
-            
+
             notificationManager.SendNotification(title, message);
         }
 

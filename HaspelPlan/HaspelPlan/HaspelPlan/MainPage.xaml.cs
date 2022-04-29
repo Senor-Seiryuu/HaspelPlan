@@ -140,12 +140,21 @@ namespace HaspelPlan
             return content;
         }
 
+        string adjustTimetable(string content)
+        {
+            //content = content.Replace("<CENTER>", "");
+            //content = content.Replace("</CENTER>", "");
+            content = content.Replace("�", "Ä");
+            content = content.Replace("<TABLE border=\"3\" rules=\"all\" cellpadding=\"1\" cellspacing=\"1\">", "<TABLE border=\\ \"3\\\" rules=\\ \"all\\\" cellpadding=\\ \"1\\\" cellspacing=\\ \"1\\\" style=\"transform: scale(0.65)!important; transform-origin: top left; margin-left:1%; \">");
+            return content;
+        }
+
         private void showPlan()
         {
             int calendarWeek = getCalendarWeek();
             string content = LoadHttpPageWithBasicAuthentication($"http://www.bkah.de/schuelerplan_praesenz/{calendarWeek}/c/c00119.htm", "schuelerplan", "schwebebahn");
 
-            content = content.Replace("�", "Ä");
+            content = adjustTimetable(content);
             content = addHoursToTable(content);
             //content = removeUnnecessaryRows(content);
 
