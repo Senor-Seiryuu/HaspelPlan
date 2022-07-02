@@ -14,5 +14,16 @@
         HorizontalOptions="End"
         VerticalOptions="End"
         Margin="40"/>
+        <Picker Title="Klasse"
+                BackgroundColor="#003758"
+                TextColor="White"
+                TitleColor="White"
+                WidthRequest="200"
+                Margin="20,0,0,40"
+                HorizontalOptions="Start" 
+                VerticalOptions="End"
+                ItemsSource="{Binding DropdownOptions}"
+                SelectedItem="{Binding selectedClass}">
+        </Picker>
     </Grid>
 </ContentPage>

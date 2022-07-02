@@ -17,14 +17,14 @@ namespace HaspelPlan.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
 
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
+            /*if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
             {
                 StartForegroundService(new Android.Content.Intent(this, typeof(HaspelPlanNotifier)));
             }
             else
             {
                 StartService(new Android.Content.Intent(this, typeof(HaspelPlanNotifier)));
-            }
+            }*/
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

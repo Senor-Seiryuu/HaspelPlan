@@ -14,10 +14,12 @@ namespace HaspelPlan
 {
     public partial class MainPage : ContentPage
     {
+        public List<String> JobList;
         public MainPage()
         {
             InitializeComponent();
             showPlan();
+            BindingContext = new ViewModel.MainViewModel();
         }
 
         private string LoadHttpPageWithBasicAuthentication(string url, string username, string password)
@@ -99,21 +101,14 @@ namespace HaspelPlan
         string removeUnnecessaryRows(string content)
         {
             // Nicht benötigte Flächen entfernen
-            content = content.Replace("<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>", "");
-            content = content.Replace("<TD colspan=12 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\"  color=\"#000000\">\nMontag\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD colspan=12 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\nDienstag\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD colspan=12 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\nMittwoch\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD colspan=12 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\nFreitag\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>16</B>\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>15</B>\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>14</B>\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>13</B>\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>12</B>\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>11</B>\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>10</B>\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>9</B>\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>8</B>\n</font> </TD>\n</TR></TABLE></TD>", "");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>7</B>\n</font> </TD>\n</TR></TABLE></TD>", "");
+            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>9</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
+            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>10</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
+            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>11</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
+            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>12</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
+            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>13</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
+            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>14</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
+            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>15</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
+            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>16</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
             return content;
         }
 
@@ -122,21 +117,18 @@ namespace HaspelPlan
             //Stundenzeiten hinzufügen
             content = content.Replace("  color=\"#000000\"", "");
             content = content.Replace("<TD align=\"center\"><TABLE><TR><TD></TD></TR></TABLE></TD>", "<TD align=\"center\"><TABLE><TR><TD>Stunden</TD></TR></TABLE></TD>");
-            //Stunden 1 und 2
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>1</B>\n</font> </TD>\n</TR></TABLE></TD>"
-                , "<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>1 / 07:30 - 08:15</B>\n</font> </TD>\n</TR></TABLE></TD>");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>2</B>\n</font> </TD>\n</TR></TABLE></TD>"
-                , "<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>2 / 08:15 - 09:00</B>\n</font> </TD>\n</TR></TABLE></TD>");
+            // Stunden 1 und 2
+            content = content.Replace("<B>1</B>", "<B>1 / 07:30 - 08:15</B>");
+            content = content.Replace("<B>2</B>", "<B>2 / 08:15 - 09:00</B>");
             // Stunden 3 und 4
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>3</B>\n</font> </TD>\n</TR></TABLE></TD>"
-                , "<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>3 / 09:15 - 10:00</B>\n</font> </TD>\n</TR></TABLE></TD>");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>4</B>\n</font> </TD>\n</TR></TABLE></TD>"
-                , "<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>4 / 10:00 - 10:45</B>\n</font> </TD>\n</TR></TABLE></TD>");
+            content = content.Replace("<B>3</B>", "<B>3 / 09:15 - 10:00</B>");
+            content = content.Replace("<B>4</B>", "<B>4 / 10:00 - 10:45</B>");
             // Stunden 5 und 6
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>5</B>\n</font> </TD>\n</TR></TABLE></TD>"
-                , "<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>5 / 11:05 - 11:50</B>\n</font> </TD>\n</TR></TABLE></TD>");
-            content = content.Replace("<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>6</B>\n</font> </TD>\n</TR></TABLE></TD>"
-                , "<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\n<B>6 / 11:50 - 12:35</B>\n</font> </TD>\n</TR></TABLE></TD>");
+            content = content.Replace("<B>5</B>", "<B>5 / 11:05 - 11:50</B>");
+            content = content.Replace("<B>6</B>", "<B>6 / 11:50 - 12:35</B>");
+            // Stunden 7 und 8
+            content = content.Replace("<B>7</B>", "<B>7 / 12:50 - 13:35</B>");
+            content = content.Replace("<B>8</B>", "<B>8 / 13:35 - 14:20</B>");
             return content;
         }
 
@@ -152,11 +144,11 @@ namespace HaspelPlan
         private void showPlan()
         {
             int calendarWeek = getCalendarWeek();
-            string content = LoadHttpPageWithBasicAuthentication($"http://www.bkah.de/schuelerplan_praesenz/{calendarWeek}/c/c00119.htm", "schuelerplan", "schwebebahn");
+            string content = LoadHttpPageWithBasicAuthentication($"http://www.bkah.de/schuelerplan_praesenz/32/c/c00116.htm", "schuelerplan", "schwebebahn");
 
             content = adjustTimetable(content);
             content = addHoursToTable(content);
-            //content = removeUnnecessaryRows(content);
+            content = removeUnnecessaryRows(content);
 
             var html = new HtmlWebViewSource
             {
