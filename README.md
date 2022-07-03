@@ -3,7 +3,7 @@
 This Project is designed to cache and show a school-timetable upon startup.
 There is a selection of several School-Classes and calendar week.
 
-# [1.0.3] - 03.07.2022
+# [1.0.4] - 03.07.2022
 ### Added
 - Set default school-class on first startup
 
