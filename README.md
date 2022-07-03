@@ -5,6 +5,14 @@ There is a selection of several School-Classes and calendar week.
 
 # [1.0.3] - 03.07.2022
 ### Added
+- Set default school-class on first startup
+
+### Modified
+- Code optimizations
+
+
+# [1.0.3] - 03.07.2022
+### Added
 - Added Dropdown for selection of School-Class
 - Saves selected School-Class in a file and selects it automatically again after every startup
 - Added Dropdown for selection of calendar week

@@ -4,7 +4,7 @@
              x:Class="HaspelPlan.View.MainPage">
     <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
         <WebView x:Name="planView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Source="{Binding planHtml}" IsVisible="{Binding planViewVisibility}"/>
-        <Label x:Name="noConnection" IsVisible="{Binding noConnection}" Text="Keine Verbindung zum Internet!" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black"/>
+        <Label x:Name="noConnection" IsVisible="{Binding noConnection}" Text="Stundenplan konnte nicht geladen werden!" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black"/>
         <Label x:Name="updatedTable" IsVisible="{Binding updatedTable}" Text="Stundenplan wurde aktualisiert!" HorizontalOptions="Center" VerticalOptions="End" Margin="0,0,0,200" TextColor="#003758" FontSize="20"/>
         <Button Text="Aktualisieren" Command="{Binding UpdateCommand}" FontSize="Small"
         BackgroundColor="#003758"
@@ -19,7 +19,7 @@
             <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
                 <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
                     <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
-                        <Picker Title="Kalenderwoche" FontSize="Small" HorizontalOptions="Start" VerticalOptions="End" WidthRequest="125" BackgroundColor="#003758" ItemsSource="{Binding calendarWeeks}" SelectedItem="{Binding selectedCalendarWeek}"/>
+                        <Picker Title="Kalenderwoche" FontSize="Small" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="End" WidthRequest="125" BackgroundColor="#003758" ItemsSource="{Binding calendarWeeks}" SelectedItem="{Binding selectedCalendarWeek}"/>
                     </Frame>
                 </Frame>
             </Frame>

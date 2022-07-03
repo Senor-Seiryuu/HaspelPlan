@@ -17,8 +17,8 @@ namespace HaspelPlan.ViewModel
         {
             UpdateCommand = new DelegateCommand(x => UpdateTable());
             ReadSelectedValue();
-            ShowPlan();
             FillCalendarWeekList();
+            ShowPlan();
         }
 
         private string classValueFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "classValue.txt");
@@ -67,9 +67,9 @@ namespace HaspelPlan.ViewModel
         {
             int calendarWeek = GetCalendarWeek();
             calendarWeeks.Add(calendarWeek);
-            calendarWeeks.Add(calendarWeek+1);
-            calendarWeeks.Add(calendarWeek+2);
-            calendarWeeks.Add(calendarWeek+3);
+            calendarWeeks.Add(calendarWeek + 1);
+            calendarWeeks.Add(calendarWeek + 2);
+            calendarWeeks.Add(calendarWeek + 3);
             selectedCalendarWeek = calendarWeek;
 
         }
@@ -91,10 +91,18 @@ namespace HaspelPlan.ViewModel
 
         private void ReadSelectedValue()
         {
-            if (File.Exists(classValueFile))
+            try
             {
+                if (!File.Exists(classValueFile)) throw new InvalidOperationException("Cannot initialize because classValue-File does not exist.");
                 _selectedValue = File.ReadAllText(classValueFile);
+
+                if (_selectedValue == "") throw new InvalidOperationException("Cannot initialize because string is empty.");
                 selectedClass = classes.FirstOrDefault(x => x.Value == _selectedValue).Key;
+            }
+            catch (InvalidOperationException)
+            {
+                selectedClass = DropdownOptions[4];
+                _selectedValue = classes[selectedClass];
             }
         }
 
