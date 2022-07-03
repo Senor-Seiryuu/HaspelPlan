@@ -10,7 +10,7 @@ namespace HaspelPlan
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new View.MainPage();
         }
 
         protected override void OnStart()
