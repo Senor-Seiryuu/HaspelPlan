@@ -13,32 +13,33 @@ namespace HaspelPlan.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
+        public MainViewModel()
+        {
+            UpdateCommand = new DelegateCommand(x => UpdateTable());
+            ReadSelectedValue();
+            ShowPlan();
+            FillCalendarWeekList();
+        }
+
         private string classValueFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "classValue.txt");
         private HtmlWebViewSource _planHtml;
+        private int _selectedCalendarWeek;
         private string _selectedClass;
-        private string selectedValue;
+        private string _selectedValue;
         private bool _noConnection = false;
         private bool _planViewVisibility = true;
         private bool _updatedTable = false;
-        private List<string> _dropdownOptions = new List<string>
+        private List<int> _calendarWeeks = new List<int> { };
+        private List<string> _dropdownOptions { get; set; } = new List<string>
         {
             "ITU1", "ITU2", "ITU3", "ITU4", "ITM1", "ITM2", "ITM3", "ITM4", "ITO1", "ITO2", "ITO3", "ITO4"
         };
 
         static Dictionary<string, string> classes { get; } = new Dictionary<string, string>
         {
-            { "ITU1", "c00124" },
-            { "ITU2", "c00125" },
-            { "ITU3", "c00126" },
-            { "ITU4", "c00127" },
-            { "ITM1", "c00116" },
-            { "ITM2", "c00117" },
-            { "ITM3", "c00118" },
-            { "ITM4", "c00119" },
-            { "ITO1", "c00120" },
-            { "ITO2", "c00121" },
-            { "ITO3", "c00122" },
-            { "ITO4", "c00123" },
+            { "ITU1", "c00124" }, { "ITU2", "c00125" }, { "ITU3", "c00126" }, { "ITU4", "c00127" },
+            { "ITM1", "c00116" }, { "ITM2", "c00117" }, { "ITM3", "c00118" }, { "ITM4", "c00119" },
+            { "ITO1", "c00120" }, { "ITO2", "c00121" }, { "ITO3", "c00122" }, { "ITO4", "c00123" },
         };
 
         public HtmlWebViewSource planHtml { get { return _planHtml; } set { _planHtml = value; NotifyPropertyChanged(); } }
@@ -46,6 +47,8 @@ namespace HaspelPlan.ViewModel
         public bool noConnection { get { return _noConnection; } set { _noConnection = value; NotifyPropertyChanged(); } }
         public bool planViewVisibility { get { return _planViewVisibility; } set { _planViewVisibility = value; NotifyPropertyChanged(); } }
         public bool updatedTable { get { return _updatedTable; } set { _updatedTable = value; NotifyPropertyChanged(); } }
+        public int selectedCalendarWeek { get { return _selectedCalendarWeek; } set { _selectedCalendarWeek = value; NotifyPropertyChanged(); } }
+        public List<int> calendarWeeks { get { return _calendarWeeks; } set { _calendarWeeks = value; NotifyPropertyChanged(); } }
         public string selectedClass
         {
             get { return _selectedClass; }
@@ -53,41 +56,45 @@ namespace HaspelPlan.ViewModel
             {
                 _selectedClass = value;
                 NotifyPropertyChanged();
-                setSelectedValue();
-                cacheSelectedValue();
+                SetSelectedValue();
+                CacheSelectedValue();
             }
         }
 
         public ICommand UpdateCommand { get; set; }
 
-        public MainViewModel()
+        private void FillCalendarWeekList()
         {
-            UpdateCommand = new DelegateCommand(x => updateTable());
-            readSelectedValue();
-            showPlan();
+            int calendarWeek = GetCalendarWeek();
+            calendarWeeks.Add(calendarWeek);
+            calendarWeeks.Add(calendarWeek+1);
+            calendarWeeks.Add(calendarWeek+2);
+            calendarWeeks.Add(calendarWeek+3);
+            selectedCalendarWeek = calendarWeek;
+
         }
 
-        private void setSelectedValue()
+        private void SetSelectedValue()
         {
             if (string.IsNullOrEmpty(selectedClass)) return;
-            selectedValue = classes[selectedClass];
+            _selectedValue = classes[selectedClass];
         }
 
-        private void cacheSelectedValue()
+        private void CacheSelectedValue()
         {
             try
             {
-                File.WriteAllText(classValueFile, selectedValue);
+                File.WriteAllText(classValueFile, _selectedValue);
             }
             catch { }
         }
 
-        private void readSelectedValue()
+        private void ReadSelectedValue()
         {
             if (File.Exists(classValueFile))
             {
-                selectedValue = File.ReadAllText(classValueFile);
-                selectedClass = classes.FirstOrDefault(x => x.Value == selectedValue).Key;
+                _selectedValue = File.ReadAllText(classValueFile);
+                selectedClass = classes.FirstOrDefault(x => x.Value == _selectedValue).Key;
             }
         }
 
@@ -158,7 +165,7 @@ namespace HaspelPlan.ViewModel
             return pageContent;
         }
 
-        private int getCalendarWeek()
+        private int GetCalendarWeek()
         {
             CultureInfo myCI = new CultureInfo("de-de");
             Calendar myCal = myCI.Calendar;
@@ -167,7 +174,7 @@ namespace HaspelPlan.ViewModel
             return myCal.GetWeekOfYear(DateTime.Now, myCWR, myFirstDOW);
         }
 
-        string removeUnnecessaryRows(string content)
+        private string RemoveUnnecessaryRows(string content)
         {
             // Nicht benötigte Flächen entfernen
             content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>9</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
@@ -181,7 +188,7 @@ namespace HaspelPlan.ViewModel
             return content;
         }
 
-        string addHoursToTable(string content)
+        private string AddHoursToTable(string content)
         {
             //Stundenzeiten hinzufügen
             content = content.Replace("  color=\"#000000\"", "");
@@ -201,23 +208,20 @@ namespace HaspelPlan.ViewModel
             return content;
         }
 
-        string adjustTimetable(string content)
+        private string AdjustTimetable(string content)
         {
-            //content = content.Replace("<CENTER>", "");
-            //content = content.Replace("</CENTER>", "");
             content = content.Replace("�", "Ä");
             content = content.Replace("<TABLE border=\"3\" rules=\"all\" cellpadding=\"1\" cellspacing=\"1\">", "<TABLE border=\\ \"3\\\" rules=\\ \"all\\\" cellpadding=\\ \"1\\\" cellspacing=\\ \"1\\\" style=\"transform: scale(0.65)!important; transform-origin: top left; margin-left:1%; \">");
             return content;
         }
 
-        private void showPlan()
+        private void ShowPlan()
         {
-            int calendarWeek = getCalendarWeek();
-            string content = LoadHttpPageWithBasicAuthentication($"http://www.bkah.de/schuelerplan_praesenz/{calendarWeek}/c/{selectedValue}.htm", "schuelerplan", "schwebebahn");
+            string content = LoadHttpPageWithBasicAuthentication($"http://www.bkah.de/schuelerplan_praesenz/{selectedCalendarWeek}/c/{_selectedValue}.htm", "schuelerplan", "schwebebahn");
 
-            content = adjustTimetable(content);
-            content = addHoursToTable(content);
-            content = removeUnnecessaryRows(content);
+            content = AdjustTimetable(content);
+            content = AddHoursToTable(content);
+            content = RemoveUnnecessaryRows(content);
 
             var html = new HtmlWebViewSource
             {
@@ -236,9 +240,9 @@ namespace HaspelPlan.ViewModel
         }
 
         // Button-Click "Aktualisieren"
-        private void updateTable()
+        private void UpdateTable()
         {
-            showPlan();
+            ShowPlan();
         }
     }
 }
