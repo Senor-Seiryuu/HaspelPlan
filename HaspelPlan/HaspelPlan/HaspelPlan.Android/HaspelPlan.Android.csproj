@@ -61,6 +61,7 @@
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <MandroidI18n />
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -172,7 +173,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionHaspelPlanAndroidHideInfoBar="True" XamarinHotReloadWrongLinkerErrorInfoBarHaspelPlanAndroidHideInfoBar="True" />
+      <UserProperties XamarinHotReloadWrongLinkerErrorInfoBarHaspelPlanAndroidHideInfoBar="True" XamarinHotReloadDebuggerTimeoutExceptionHaspelPlanAndroidHideInfoBar="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -2,49 +2,53 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HaspelPlan.View.MainPage">
-    <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-        <WebView x:Name="planView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Source="{Binding planHtml}" IsVisible="{Binding planViewVisibility}"/>
-        <Label x:Name="noConnection" IsVisible="{Binding noConnection}" Text="Stundenplan konnte nicht geladen werden!" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black"/>
-        <Label x:Name="updatedTable" IsVisible="{Binding updatedTable}" Text="Stundenplan wurde aktualisiert!" HorizontalOptions="Center" VerticalOptions="End" Margin="0,0,0,200" TextColor="#003758" FontSize="20"/>
-        <Button Text="Aktualisieren" Command="{Binding UpdateCommand}" FontSize="Small"
-        BackgroundColor="#003758"
-        BorderRadius="10"
-        BorderWidth="2"
-        BorderColor="#00AFD3"
-        HorizontalOptions="End"
-        VerticalOptions="End"
-        Margin="0,0,20,40"/>
+    <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="white">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackLayout Grid.Row="0" BackgroundColor="White">
+            <WebView x:Name="planView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Source="{Binding planHtml}" IsVisible="{Binding planViewVisibility}"/>
+            <Label x:Name="noConnection" IsVisible="{Binding noConnection}" Text="Stundenplan konnte nicht geladen werden!" HorizontalOptions="Center" Margin="0,140,0,0" TextColor="#003758"/>
+            <Label x:Name="updatedTable" IsVisible="{Binding updatedTable}" Text="Stundenplan wurde aktualisiert!" HorizontalOptions="Center" VerticalOptions="End" TextColor="#003758" FontSize="20"/>
+        </StackLayout>
+        
+        <StackLayout Grid.Row="1" WidthRequest="125" BackgroundColor="White" Padding="100,0,100,0">
 
-        <Frame HorizontalOptions="Start" VerticalOptions="End" BorderColor="#00AFD3" Margin="20,0,0,40" CornerRadius="10" WidthRequest="125" Padding="0">
-            <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
+            <Frame CornerRadius="10" WidthRequest="125" Padding="0" Margin="0,0,0,5">
                 <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
                     <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
-                        <Picker Title="Kalenderwoche" FontSize="Small" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="End" WidthRequest="125" BackgroundColor="#003758" ItemsSource="{Binding calendarWeeks}" SelectedItem="{Binding selectedCalendarWeek}"/>
-                    </Frame>
-                </Frame>
-            </Frame>
-        </Frame>
-
-        <Frame HorizontalOptions="Start" VerticalOptions="End" BorderColor="#00AFD3" Margin="160,0,0,40" CornerRadius="10" WidthRequest="80" Padding="0">
-            <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
-                <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
-                    <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
-                        <Picker Title="Klasse"
+                        <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
+                            <Picker Title="Klasse"
                                 FontSize="Small"
-                                HorizontalOptions="Start" 
                                 VerticalTextAlignment="Center"
                                 HorizontalTextAlignment="Center"
-                                VerticalOptions="End"
                                 BackgroundColor="#003758"
                                 TextColor="White"
                                 TitleColor="White"
-                                WidthRequest="80"
                                 ItemsSource="{Binding DropdownOptions}"
                                 SelectedItem="{Binding selectedClass}"/>
+                        </Frame>
                     </Frame>
                 </Frame>
             </Frame>
-        </Frame>
+            
+            <Frame CornerRadius="10" WidthRequest="125" Padding="0" Margin="0,0,0,5">
+                <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
+                    <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
+                        <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
+                            <Picker Title="Kalenderwoche" FontSize="Small" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" BackgroundColor="#003758" ItemsSource="{Binding calendarWeeks}" SelectedItem="{Binding selectedCalendarWeek}"/>
+                        </Frame>
+                    </Frame>
+                </Frame>
+            </Frame>
 
+            <Button Text="Aktualisieren" Command="{Binding UpdateCommand}" FontSize="Small"
+                    Margin="0"
+                    BackgroundColor="#003758"
+                    BorderRadius="10"
+                    BorderWidth="2"
+                    BorderColor="#00AFD3"/>
+        </StackLayout>
     </Grid>
 </ContentPage>

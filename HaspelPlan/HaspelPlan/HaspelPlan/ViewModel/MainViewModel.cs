@@ -39,7 +39,7 @@ namespace HaspelPlan.ViewModel
         {
             { "ITU1", "c00124" }, { "ITU2", "c00125" }, { "ITU3", "c00126" }, { "ITU4", "c00127" },
             { "ITM1", "c00116" }, { "ITM2", "c00117" }, { "ITM3", "c00118" }, { "ITM4", "c00119" },
-            { "ITO1", "c00120" }, { "ITO2", "c00121" }, { "ITO3", "c00122" }, { "ITO4", "c00123" },
+            { "ITO1", "c00120" }, { "ITO2", "c00121" }, { "ITO3", "c00122" }, { "ITO4", "c00123" }
         };
 
         public HtmlWebViewSource planHtml { get { return _planHtml; } set { _planHtml = value; NotifyPropertyChanged(); } }
