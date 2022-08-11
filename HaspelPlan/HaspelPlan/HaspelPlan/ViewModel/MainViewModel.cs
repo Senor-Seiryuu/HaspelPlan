@@ -37,9 +37,9 @@ namespace HaspelPlan.ViewModel
 
         static Dictionary<string, string> classes { get; } = new Dictionary<string, string>
         {
-            { "ITU1", "c00124" }, { "ITU2", "c00125" }, { "ITU3", "c00126" }, { "ITU4", "c00127" },
-            { "ITM1", "c00116" }, { "ITM2", "c00117" }, { "ITM3", "c00118" }, { "ITM4", "c00119" },
-            { "ITO1", "c00120" }, { "ITO2", "c00121" }, { "ITO3", "c00122" }, { "ITO4", "c00123" }
+            { "ITU1", "c00123" }, { "ITU2", "c00124" }, { "ITU3", "c00125" }, { "ITU4", "c00126" },
+            { "ITM1", "c00115" }, { "ITM2", "c00116" }, { "ITM3", "c00117" }, { "ITM4", "c00118" },
+            { "ITO1", "c00119" }, { "ITO2", "c00120" }, { "ITO3", "c00121" }, { "ITO4", "c00122" }
         };
 
         public HtmlWebViewSource planHtml { get { return _planHtml; } set { _planHtml = value; NotifyPropertyChanged(); } }

@@ -3,6 +3,10 @@
 This Project is designed to cache and show a school-timetable upon startup.
 There is a selection of several School-Classes and calendar week.
 
+# [1.0.6] - 11.08.2022
+### Fixed
+- Fixed Tables to matching Frames
+
 # [1.0.5] - 04.07.2022
 ### Modified
 - Changed layout of all elements
