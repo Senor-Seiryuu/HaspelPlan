@@ -3,24 +3,14 @@ using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
-using WindowsAzure.Messaging.NotificationHubs;
 
 namespace HaspelPlan.Droid
 {
     [Activity(Label = "HaspelPlan", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-
-        internal static readonly string CHANNEL_ID = "HaspelPlanNotifier";
-
         protected override void OnCreate(Bundle savedInstanceState)
         {
-
-            // Listen for push notifications
-            NotificationHub.SetListener(new AzureListener());
-
-            // Start the SDK
-            NotificationHub.Start(this.Application, Constants.NotificationHubName, Constants.ListenConnectionString);
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
