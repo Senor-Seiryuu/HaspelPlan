@@ -16,12 +16,14 @@ namespace HaspelPlan.ViewModel
         public MainViewModel()
         {
             UpdateCommand = new DelegateCommand(x => UpdateTable());
+            GetClassFrames();
             ReadSelectedValue();
             FillCalendarWeekList();
             ShowPlan();
         }
 
         private string classValueFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "classValue.txt");
+        private string classFrameFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "classFrame.txt");
         private HtmlWebViewSource _planHtml;
         private int _selectedCalendarWeek;
         private string _selectedClass;
@@ -37,9 +39,9 @@ namespace HaspelPlan.ViewModel
 
         static Dictionary<string, string> classes { get; } = new Dictionary<string, string>
         {
-            { "ITU1", "c00120" }, { "ITU2", "c00121" }, { "ITU3", "c00122" }, { "ITU4", "c00123" },
-            { "ITM1", "c00112" }, { "ITM2", "c00113" }, { "ITM3", "c00114" }, { "ITM4", "c00115" },
-            { "ITO1", "c00116" }, { "ITO2", "c00117" }, { "ITO3", "c00118" }, { "ITO4", "c00119" }
+            { "ITU1", "" }, { "ITU2", "" }, { "ITU3", "" }, { "ITU4", "" },
+            { "ITM1", "" }, { "ITM2", "" }, { "ITM3", "" }, { "ITM4", "" },
+            { "ITO1", "" }, { "ITO2", "" }, { "ITO3", "" }, { "ITO4", "" }
         };
 
         public HtmlWebViewSource planHtml { get { return _planHtml; } set { _planHtml = value; NotifyPropertyChanged(); } }
@@ -225,7 +227,8 @@ namespace HaspelPlan.ViewModel
 
         private void ShowPlan()
         {
-            string content = LoadHttpPageWithBasicAuthentication($"http://www.bkah.de/schuelerplan_praesenz/{selectedCalendarWeek}/c/{_selectedValue}.htm", "schuelerplan", "schwebebahn");
+            string link = $"http://www.bkah.de/schuelerplan_praesenz/{selectedCalendarWeek}/c/c{_selectedValue}.htm";
+            string content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
 
             content = AdjustTimetable(content);
             content = AddHoursToTable(content);
@@ -251,6 +254,69 @@ namespace HaspelPlan.ViewModel
         private void UpdateTable()
         {
             ShowPlan();
+        }
+
+        private void GetClassFrames()
+        {
+            string link = "";
+            string content;
+            string cf = "";
+            try
+            {
+                if (!File.Exists(classFrameFile)) throw new InvalidOperationException("Cannot initialize because classFrame-File does not exist.");
+                cf = File.ReadAllText(classFrameFile);
+                link = $"http://www.bkah.de/schuelerplan_praesenz/{GetCalendarWeek()}/c/c{cf}.htm";
+                content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
+
+                if (!content.ToLower().Contains("itm1")) throw new InvalidOperationException("classFrame-string does not match the current class frames. Starting update...");
+
+                UpdateClassesDict(cf);
+            }
+            catch (InvalidOperationException)
+            {
+                for (int i = 1; i < 150; i++)
+                {
+                    cf = FillDigits(i);
+                    link = $"http://www.bkah.de/schuelerplan_praesenz/{GetCalendarWeek()}/c/c{cf}.htm";
+                    content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
+                    if (content.ToLower().Contains("itm1"))
+                    {
+                        break;
+                    }
+                }
+
+                UpdateClassesDict(cf);
+                CacheClassFrame(cf);
+            }
+        }
+
+        private void UpdateClassesDict(string cf)
+        {
+            for (int i = 1; i <= 4; i++)
+            {
+                classes[$"ITU{i}"] = FillDigits((int.Parse(cf) + 8) + (i - 1));
+                classes[$"ITM{i}"] = FillDigits(int.Parse(cf) + (i - 1));
+                classes[$"ITO{i}"] = FillDigits((int.Parse(cf) + 4) + (i - 1));
+            }
+        }
+
+        private string FillDigits(int calendarWeek)
+        {
+            string cwBuffer = calendarWeek.ToString();
+            for (int i = 0; i < 6; i++)
+            {
+                if (cwBuffer.Length != 5) cwBuffer = "0" + cwBuffer;
+            }
+            return cwBuffer;
+        }
+
+        private void CacheClassFrame(string cf)
+        {
+            try
+            {
+                File.WriteAllText(classFrameFile, cf);
+            }
+            catch { }
         }
     }
 }

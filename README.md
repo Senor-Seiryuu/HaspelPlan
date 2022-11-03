@@ -3,6 +3,11 @@
 This Project is designed to cache and show a school-timetable upon startup.
 There is a selection of several School-Classes and calendar week.
 
+# [1.0.9] - 03.11.2022
+### Modified
+- Initializes the class frames on first startup and caches the value.
+- Checks on every startup, if the class frames are still valid.
+
 # [1.0.8] - 19.08.2022
 ### Modified
 - Changed font color of Dropdown and Update-Button
