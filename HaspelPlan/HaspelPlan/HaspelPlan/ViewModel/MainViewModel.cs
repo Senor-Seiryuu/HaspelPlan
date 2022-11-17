@@ -264,11 +264,12 @@ namespace HaspelPlan.ViewModel
             try
             {
                 if (!File.Exists(classFrameFile)) throw new InvalidOperationException("Cannot initialize because classFrame-File does not exist.");
+                
                 cf = File.ReadAllText(classFrameFile);
                 link = $"http://www.bkah.de/schuelerplan_praesenz/{GetCalendarWeek()}/c/c{cf}.htm";
                 content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
 
-                if (!content.ToLower().Contains("itm1")) throw new InvalidOperationException("classFrame-string does not match the current class frames. Starting update...");
+                if (!content.ToLower().Contains("itm1")) throw new InvalidOperationException("classFrame-string does not match the current class frames.");
 
                 UpdateClassesDict(cf);
             }
@@ -290,31 +291,31 @@ namespace HaspelPlan.ViewModel
             }
         }
 
-        private void UpdateClassesDict(string cf)
+        private void UpdateClassesDict(string classFrame)
         {
             for (int i = 1; i <= 4; i++)
             {
-                classes[$"ITU{i}"] = FillDigits((int.Parse(cf) + 8) + (i - 1));
-                classes[$"ITM{i}"] = FillDigits(int.Parse(cf) + (i - 1));
-                classes[$"ITO{i}"] = FillDigits((int.Parse(cf) + 4) + (i - 1));
+                classes[$"ITM{i}"] = FillDigits(int.Parse(classFrame) + (i - 1));
+                classes[$"ITO{i}"] = FillDigits((int.Parse(classFrame) + 4) + (i - 1));
+                classes[$"ITU{i}"] = FillDigits((int.Parse(classFrame) + 8) + (i - 1));
             }
         }
 
-        private string FillDigits(int calendarWeek)
+        private string FillDigits(int classFrame)
         {
-            string cwBuffer = calendarWeek.ToString();
-            for (int i = 0; i < 6; i++)
+            string cfBuffer = classFrame.ToString();
+            for (int i = 0; i < 4; i++)
             {
-                if (cwBuffer.Length != 5) cwBuffer = "0" + cwBuffer;
+                if (cfBuffer.Length != 5) cfBuffer = "0" + cfBuffer;
             }
-            return cwBuffer;
+            return cfBuffer;
         }
 
-        private void CacheClassFrame(string cf)
+        private void CacheClassFrame(string classFrame)
         {
             try
             {
-                File.WriteAllText(classFrameFile, cf);
+                File.WriteAllText(classFrameFile, classFrame);
             }
             catch { }
         }
