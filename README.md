@@ -3,6 +3,16 @@
 This Project is designed to cache and show a school-timetable upon startup.
 There is a selection of several School-Classes and calendar week.
 
+# [1.0.10] - 17.11.2022
+### Modified
+- Renamed Variables
+- Removed redundant loading of webpage
+- Showing weekdays in calendarWeek-selector
+- Fixed line endings to windows
+
+### Fixed
+- Deletion of unneeded timetable rows
+
 # [1.0.9] - 03.11.2022
 ### Modified
 - Initializes the class frames on first startup and caches the value.

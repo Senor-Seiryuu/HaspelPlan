@@ -25,13 +25,13 @@ namespace HaspelPlan.ViewModel
         private string classValueFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "classValue.txt");
         private string classFrameFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "classFrame.txt");
         private HtmlWebViewSource _planHtml;
-        private int _selectedCalendarWeek;
+        private string _selectedCalendarWeek;
         private string _selectedClass;
         private string _selectedValue;
         private bool _noConnection = false;
         private bool _planViewVisibility = true;
         private bool _updatedTable = false;
-        private List<int> _calendarWeeks = new List<int> { };
+        private List<string> _calendarWeeks = new List<string> { };
         private List<string> _dropdownOptions { get; set; } = new List<string>
         {
             "ITU1", "ITU2", "ITU3", "ITU4", "ITM1", "ITM2", "ITM3", "ITM4", "ITO1", "ITO2", "ITO3", "ITO4"
@@ -49,8 +49,8 @@ namespace HaspelPlan.ViewModel
         public bool noConnection { get { return _noConnection; } set { _noConnection = value; NotifyPropertyChanged(); } }
         public bool planViewVisibility { get { return _planViewVisibility; } set { _planViewVisibility = value; NotifyPropertyChanged(); } }
         public bool updatedTable { get { return _updatedTable; } set { _updatedTable = value; NotifyPropertyChanged(); } }
-        public int selectedCalendarWeek { get { return _selectedCalendarWeek; } set { _selectedCalendarWeek = value; NotifyPropertyChanged(); } }
-        public List<int> calendarWeeks { get { return _calendarWeeks; } set { _calendarWeeks = value; NotifyPropertyChanged(); } }
+        public string selectedCalendarWeek{ get { return _selectedCalendarWeek; } set { _selectedCalendarWeek = value; NotifyPropertyChanged(); } }
+        public List<string> calendarWeeks { get { return _calendarWeeks; } set { _calendarWeeks = value; NotifyPropertyChanged(); } }
         public string selectedClass
         {
             get { return _selectedClass; }
@@ -67,13 +67,15 @@ namespace HaspelPlan.ViewModel
 
         private void FillCalendarWeekList()
         {
-            int calendarWeek = GetCalendarWeek();
-            calendarWeeks.Add(calendarWeek);
-            calendarWeeks.Add(calendarWeek + 1);
-            calendarWeeks.Add(calendarWeek + 2);
-            calendarWeeks.Add(calendarWeek + 3);
-            selectedCalendarWeek = calendarWeek;
+            CultureInfo CI = new CultureInfo("de-de");
+            Calendar cal = CI.Calendar;
+            DateTime startOfWeek = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
 
+            calendarWeeks.Add(cal.GetDayOfMonth(startOfWeek) + "." + cal.GetMonth(startOfWeek) + "." + cal.GetYear(startOfWeek) + " - " + cal.GetDayOfMonth(startOfWeek.AddDays(6)) + "." + cal.GetMonth(startOfWeek.AddDays(6)) + "." + cal.GetYear(startOfWeek.AddDays(6)));
+            calendarWeeks.Add(cal.GetDayOfMonth(startOfWeek.AddDays(7)) + "." + cal.GetMonth(startOfWeek.AddDays(7)) + "." + cal.GetYear(startOfWeek.AddDays(7)) + " - " + cal.GetDayOfMonth(startOfWeek.AddDays(13)) + "." + cal.GetMonth(startOfWeek.AddDays(13)) + "." + cal.GetYear(startOfWeek.AddDays(13)));
+            calendarWeeks.Add(cal.GetDayOfMonth(startOfWeek.AddDays(14)) + "." + cal.GetMonth(startOfWeek.AddDays(14)) + "." + cal.GetYear(startOfWeek.AddDays(14)) + " - " + cal.GetDayOfMonth(startOfWeek.AddDays(20)) + "." + cal.GetMonth(startOfWeek.AddDays(20)) + "." + cal.GetYear(startOfWeek.AddDays(20)));
+            calendarWeeks.Add(cal.GetDayOfMonth(startOfWeek.AddDays(21)) + "." + cal.GetMonth(startOfWeek.AddDays(21)) + "." + cal.GetYear(startOfWeek.AddDays(21)) + " - " + cal.GetDayOfMonth(startOfWeek.AddDays(27)) + "." + cal.GetMonth(startOfWeek.AddDays(27)) + "." + cal.GetYear(startOfWeek.AddDays(27)));
+            selectedCalendarWeek = calendarWeeks[0];
         }
 
         private void SetSelectedValue()
@@ -184,18 +186,23 @@ namespace HaspelPlan.ViewModel
             return myCal.GetWeekOfYear(DateTime.Now, myCWR, myFirstDOW);
         }
 
+        private int GetSelectedCalendarWeekAsInt()
+        {
+            int calendarWeek = GetCalendarWeek();
+
+            for (int i = 0; i < calendarWeeks.Count(); i++)
+            {
+                if (selectedCalendarWeek == calendarWeeks[i]) return calendarWeek + i;
+            }
+            return calendarWeek;
+        }
+
         private string RemoveUnnecessaryRows(string content)
         {
             // Nicht benötigte Flächen entfernen
-            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>9</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
-            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>10</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
-            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>11</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
-            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>12</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
-            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>13</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
-            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>14</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
-            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>15</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
-            content = content.Replace("<TR>\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"4\" face=\"Arial\">\n<B>16</B>\n</font> </TD>\n</TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n<TD colspan=12 rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD></TD></TR></TABLE></TD>\n</TR><TR>\n</TR>", "");
-            return content;
+            int startingIndex = content.IndexOf("<TR>\r\n<TD rowspan=2 align=\"center\" nowrap=\"1\"><TABLE><TR><TD align=\"center\" nowrap=1><font size=\"3\" face=\"Arial\">\r\n<B>9</B>");
+            int endingIndex = content.IndexOf("</TABLE><TABLE");
+            return content.Remove(startingIndex, endingIndex - startingIndex);
         }
 
         private string AddHoursToTable(string content)
@@ -227,7 +234,7 @@ namespace HaspelPlan.ViewModel
 
         private void ShowPlan()
         {
-            string link = $"http://www.bkah.de/schuelerplan_praesenz/{selectedCalendarWeek}/c/c{_selectedValue}.htm";
+            string link = $"http://www.bkah.de/schuelerplan_praesenz/{GetSelectedCalendarWeekAsInt()}/c/c{_selectedValue}.htm";
             string content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
 
             content = AdjustTimetable(content);
@@ -318,6 +325,15 @@ namespace HaspelPlan.ViewModel
                 File.WriteAllText(classFrameFile, classFrame);
             }
             catch { }
+        }
+    }
+
+    public static class DateTimeExtensions
+    {
+        public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek)
+        {
+            int diff = (7 + (dt.DayOfWeek - startOfWeek)) % 7;
+            return dt.AddDays(-1 * diff).Date;
         }
     }
 }
