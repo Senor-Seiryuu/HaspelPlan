@@ -34,14 +34,14 @@ namespace HaspelPlan.ViewModel
         private List<string> _calendarWeeks = new List<string> { };
         private List<string> _dropdownOptions { get; set; } = new List<string>
         {
-            "ITU1", "ITU2", "ITU3", "ITU4", "ITM1", "ITM2", "ITM3", "ITM4", "ITO1", "ITO3"
+            "ITU1", "ITU2", "ITU3", "ITU4", "ITM1", "ITM2", "ITM3", "ITM4", "ITO1", "ITO2", "ITO3", "ITO4"
         };
 
         static Dictionary<string, string> classes { get; } = new Dictionary<string, string>
         {
             { "ITU1", "" }, { "ITU2", "" }, { "ITU3", "" }, { "ITU4", "" },
             { "ITM1", "" }, { "ITM2", "" }, { "ITM3", "" }, { "ITM4", "" },
-            { "ITO1", "" }, { "ITO3", "" }
+            { "ITO1", "" }, { "ITO2", "" }, { "ITO3", "" }, { "ITO4", "" }
         };
 
         public HtmlWebViewSource planHtml { get { return _planHtml; } set { _planHtml = value; NotifyPropertyChanged(); } }
@@ -49,7 +49,7 @@ namespace HaspelPlan.ViewModel
         public bool noConnection { get { return _noConnection; } set { _noConnection = value; NotifyPropertyChanged(); } }
         public bool planViewVisibility { get { return _planViewVisibility; } set { _planViewVisibility = value; NotifyPropertyChanged(); } }
         public bool updatedTable { get { return _updatedTable; } set { _updatedTable = value; NotifyPropertyChanged(); } }
-        public string selectedCalendarWeek{ get { return _selectedCalendarWeek; } set { _selectedCalendarWeek = value; NotifyPropertyChanged(); } }
+        public string selectedCalendarWeek { get { return _selectedCalendarWeek; } set { _selectedCalendarWeek = value; NotifyPropertyChanged(); } }
         public List<string> calendarWeeks { get { return _calendarWeeks; } set { _calendarWeeks = value; NotifyPropertyChanged(); } }
         public string selectedClass
         {
@@ -234,8 +234,20 @@ namespace HaspelPlan.ViewModel
 
         private void ShowPlan()
         {
+            CultureInfo CI = new CultureInfo("de-de");
+            Calendar cal = CI.Calendar;
+            DateTime startOfWeek = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
+
             string link = $"http://www.bkah.de/schuelerplan_praesenz/{GetSelectedCalendarWeekAsInt()}/c/c{_selectedValue}.htm";
             string content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
+
+            string weekStart = cal.GetDayOfMonth(startOfWeek) + "." + cal.GetMonth(startOfWeek) + "." + cal.GetYear(startOfWeek);
+            if (!content.Contains(weekStart))
+            {
+                selectedCalendarWeek = calendarWeeks[1];
+                link = $"http://www.bkah.de/schuelerplan_praesenz/{GetSelectedCalendarWeekAsInt()}/c/c{_selectedValue}.htm";
+                content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
+            }
 
             content = AdjustTimetable(content);
             content = AddHoursToTable(content);
@@ -271,7 +283,7 @@ namespace HaspelPlan.ViewModel
             try
             {
                 if (!File.Exists(classFrameFile)) throw new InvalidOperationException("Cannot initialize because classFrame-File does not exist.");
-                
+
                 cf = File.ReadAllText(classFrameFile);
                 link = $"http://www.bkah.de/schuelerplan_praesenz/{GetCalendarWeek()}/c/c{cf}.htm";
                 content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
@@ -282,10 +294,18 @@ namespace HaspelPlan.ViewModel
             }
             catch (InvalidOperationException)
             {
+                int cWeek = GetCalendarWeek();
+                for(int i; cWeek < 55; cWeek++)
+                {
+                    link = $"http://www.bkah.de/schuelerplan_praesenz/{cWeek}/c/c{FillDigits(2)}.htm";
+                    content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
+                    if (!String.IsNullOrEmpty(content)) break;
+                }
+
                 for (int i = 1; i < 150; i++)
                 {
                     cf = FillDigits(i);
-                    link = $"http://www.bkah.de/schuelerplan_praesenz/{GetCalendarWeek()}/c/c{cf}.htm";
+                    link = $"http://www.bkah.de/schuelerplan_praesenz/{cWeek}/c/c{cf}.htm";
                     content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
                     if (content.ToLower().Contains("itm1"))
                     {
@@ -303,15 +323,8 @@ namespace HaspelPlan.ViewModel
             for (int i = 1; i <= 4; i++)
             {
                 classes[$"ITM{i}"] = FillDigits(int.Parse(classFrame) + (i - 1));
-                classes[$"ITU{i}"] = FillDigits((int.Parse(classFrame) - 4) + (i - 1));
-                if(i == 1)
-                {
-                    classes[$"ITO{i}"] = FillDigits((int.Parse(classFrame) + 4) + (i - 1));
-                }
-                else if(i == 3)
-                {
-                    classes[$"ITO{i}"] = FillDigits((int.Parse(classFrame) + 4) + (i - 2));
-                }
+                classes[$"ITO{i}"] = FillDigits((int.Parse(classFrame) + 4) + (i - 1));
+                classes[$"ITU{i}"] = FillDigits((int.Parse(classFrame) + 8) + (i - 1));
             }
         }
 

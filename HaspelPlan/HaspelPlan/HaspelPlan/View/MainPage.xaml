@@ -37,7 +37,11 @@
                 <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
                     <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
                         <Frame Padding="0.5" BackgroundColor="Transparent" BorderColor="#00AFD3" CornerRadius="10">
-                            <Picker Title="Kalenderwoche" FontSize="Small" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" BackgroundColor="#003758" TextColor="White" ItemsSource="{Binding calendarWeeks}" SelectedItem="{Binding selectedCalendarWeek}"/>
+                            <Picker Title="Kalenderwoche" FontSize="Small"
+                                    HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                    BackgroundColor="#003758" TextColor="White"
+                                    ItemsSource="{Binding calendarWeeks}"
+                                    SelectedItem="{Binding selectedCalendarWeek}"/>
                         </Frame>
                     </Frame>
                 </Frame>
