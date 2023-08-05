@@ -3,6 +3,10 @@
 This Project is designed to cache and show a school-timetable upon startup.
 There is a selection of several School-Classes and calendar week.
 
+# [1.0.12] - 05.08.2023
+### Fixed
+- Fixed the timetables of all classes
+
 # [1.0.11] - 10.02.2023
 ### Fixed
 - Fixed the timetables of Classes ITO and ITU
