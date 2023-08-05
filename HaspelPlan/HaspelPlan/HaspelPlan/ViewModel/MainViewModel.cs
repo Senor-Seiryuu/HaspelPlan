@@ -234,20 +234,8 @@ namespace HaspelPlan.ViewModel
 
         private void ShowPlan()
         {
-            CultureInfo CI = new CultureInfo("de-de");
-            Calendar cal = CI.Calendar;
-            DateTime startOfWeek = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
-
             string link = $"http://www.bkah.de/schuelerplan_praesenz/{GetSelectedCalendarWeekAsInt()}/c/c{_selectedValue}.htm";
             string content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
-
-            string weekStart = cal.GetDayOfMonth(startOfWeek) + "." + cal.GetMonth(startOfWeek) + "." + cal.GetYear(startOfWeek);
-            if (!content.Contains(weekStart))
-            {
-                selectedCalendarWeek = calendarWeeks[1];
-                link = $"http://www.bkah.de/schuelerplan_praesenz/{GetSelectedCalendarWeekAsInt()}/c/c{_selectedValue}.htm";
-                content = LoadHttpPageWithBasicAuthentication(link, "schuelerplan", "schwebebahn");
-            }
 
             content = AdjustTimetable(content);
             content = AddHoursToTable(content);
